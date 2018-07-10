@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Baking 101</string>
+    <string name="tools_text_serving_size">Serves 4</string>
+    <string name="content_desc_cardview">ImageViewCardView</string>
+</resources>
