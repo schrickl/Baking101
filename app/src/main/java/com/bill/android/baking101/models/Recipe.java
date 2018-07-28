@@ -10,9 +10,9 @@ public class Recipe implements Parcelable {
     private Ingredient mIngredients;
     private Step mSteps;
     private int mServings;
-    private int mThumbnail;
+    private String  mThumbnail;
 
-    public Recipe (int id, String name, Ingredient ingredients, Step steps, int servings, int thumbnail) {
+    public Recipe (int id, String name, Ingredient ingredients, Step steps, int servings, String thumbnail) {
         mId = id;
         mName = name;
         mIngredients = ingredients;
@@ -53,7 +53,7 @@ public class Recipe implements Parcelable {
         this.mSteps = steps;
     }
 
-    public int getmervings() {
+    public int getServings() {
         return mServings;
     }
 
@@ -61,19 +61,31 @@ public class Recipe implements Parcelable {
         this.mServings = servings;
     }
 
-    public int getThumbnail() {
+    public String getThumbnail() {
         return mThumbnail;
     }
 
-    public void setThumbnail(int thumbnail) {
+    public void setThumbnail(String thumbnail) {
         this.mThumbnail = thumbnail;
+    }
+
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "mId=" + mId +
+                ", mName='" + mName + '\'' +
+                ", mIngredients=" + mIngredients +
+                ", mSteps=" + mSteps +
+                ", mServings=" + mServings +
+                ", mThumbnail='" + mThumbnail + '\'' +
+                '}';
     }
 
     protected Recipe(Parcel in) {
         mId = in.readInt();
         mName = in.readString();
         mServings = in.readInt();
-        mThumbnail = in.readInt();
+        mThumbnail = in.readString();
     }
 
     public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
@@ -98,6 +110,6 @@ public class Recipe implements Parcelable {
         parcel.writeInt(mId);
         parcel.writeString(mName);
         parcel.writeInt(mServings);
-        parcel.writeInt(mThumbnail);
+        parcel.writeString(mThumbnail);
     }
 }

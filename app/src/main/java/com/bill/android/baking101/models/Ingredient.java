@@ -39,6 +39,15 @@ public class Ingredient implements Parcelable {
         this.mName = name;
     }
 
+    @Override
+    public String toString() {
+        return "Ingredient{" +
+                "mQuantity=" + mQuantity +
+                ", mMeasure='" + mMeasure + '\'' +
+                ", mName='" + mName + '\'' +
+                '}';
+    }
+
     protected Ingredient(Parcel in) {
         mQuantity = in.readInt();
         mMeasure = in.readString();

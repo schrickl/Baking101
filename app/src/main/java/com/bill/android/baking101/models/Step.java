@@ -5,26 +5,16 @@ import android.os.Parcelable;
 
 public class Step implements Parcelable {
 
-    private int mId;
     private String mShortDescription;
     private String mDescription;
     private String mVideoUrl;
     private String mThumbnailUrl;
 
-    public Step(int id, String shortDescription, String description, String videoUrl, String thumbnailUrl) {
-        mId = id;
+    public Step(String shortDescription, String description, String videoUrl, String thumbnailUrl) {
         mShortDescription = shortDescription;
         mDescription = description;
         mVideoUrl = videoUrl;
         mThumbnailUrl = thumbnailUrl;
-    }
-
-    public int getId() {
-        return mId;
-    }
-
-    public void setId(int id) {
-        this.mId = id;
     }
 
     public String getShortDescription() {
@@ -59,12 +49,23 @@ public class Step implements Parcelable {
         this.mThumbnailUrl = thumbnailUrl;
     }
 
+
+
     protected Step(Parcel in) {
-        mId = in.readInt();
         mShortDescription = in.readString();
         mDescription = in.readString();
         mVideoUrl = in.readString();
         mThumbnailUrl = in.readString();
+    }
+
+    @Override
+    public String toString() {
+        return "Step{" +
+                "mShortDescription='" + mShortDescription + '\'' +
+                ", mDescription='" + mDescription + '\'' +
+                ", mVideoUrl='" + mVideoUrl + '\'' +
+                ", mThumbnailUrl='" + mThumbnailUrl + '\'' +
+                '}';
     }
 
     public static final Creator<Step> CREATOR = new Creator<Step>() {
@@ -86,7 +87,6 @@ public class Step implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(mId);
         parcel.writeString(mShortDescription);
         parcel.writeString(mDescription);
         parcel.writeString(mVideoUrl);
