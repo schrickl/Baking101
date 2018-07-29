@@ -2,7 +2,6 @@ package com.bill.android.baking101.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +48,6 @@ public class RecipeStepsAdapter extends RecyclerView.Adapter<RecipeStepsAdapter.
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Step step = mStepList.get(position);
 
-        Log.i(LOG_TAG, "step: " + step.getShortDescription());
         holder.step.setText(step.getShortDescription());
    }
 
