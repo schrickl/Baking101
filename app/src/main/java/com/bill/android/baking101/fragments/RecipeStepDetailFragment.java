@@ -6,6 +6,9 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -59,8 +62,18 @@ public class RecipeStepDetailFragment extends Fragment implements ExoPlayer.Even
 
         ButterKnife.bind(this, rootView);
 
-        mRecipe = getActivity().getIntent().getParcelableExtra("recipe_extra");
-        mPosition = getActivity().getIntent().getIntExtra("step_number", 0);
+        if (savedInstanceState == null) {
+            if (getActivity().getIntent().hasExtra(getResources().getString(R.string.recipe_extra))) {
+                mRecipe = getActivity().getIntent().getParcelableExtra(getResources().getString(R.string.recipe_extra));
+                mPosition = getActivity().getIntent().getIntExtra(getResources().getString(R.string.recipe_position), 0);
+            }
+        } else {
+            mRecipe = savedInstanceState.getParcelable(getResources().getString(R.string.recipe_extra));
+            mPosition = savedInstanceState.getInt(getResources().getString(R.string.recipe_position));
+            mPlayerPosition = savedInstanceState.getLong(getResources().getString(R.string.player_position));
+            Log.d(LOG_TAG, "saved position: " + mPlayerPosition);
+        }
+
         initializePlayer();
 
         mNextBtn.setOnClickListener(new OnClickListener() {
@@ -69,19 +82,32 @@ public class RecipeStepDetailFragment extends Fragment implements ExoPlayer.Even
                 handleButtonClick(v);
             }
         });
-
         mPreviousBtn.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleButtonClick(v);
             }
         });
+        mDescription.setText(mRecipe.getSteps().get(mPosition).getDescription());
 
         playVideo();
-        mDescription.setText(mRecipe.getSteps().get(mPosition).getDescription());
 
         // Return the root view
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(getResources().getString(R.string.recipe_extra), mRecipe);
+        outState.putInt(getResources().getString(R.string.recipe_position), mPosition);
+        if (mPlayer != null) {
+            Log.d(LOG_TAG, "saving position: " + mPlayer.getCurrentPosition());
+            outState.putLong(getResources().getString(R.string.player_position), mPlayer.getCurrentPosition());
+        } else {
+            Log.d(LOG_TAG, "saving position: " + mPlayerPosition);
+            outState.putLong(getResources().getString(R.string.player_position), mPlayerPosition);
+        }
+        super.onSaveInstanceState(outState);
     }
 
     private void initializePlayer() {
@@ -133,6 +159,17 @@ public class RecipeStepDetailFragment extends Fragment implements ExoPlayer.Even
     private void playVideo() {
         mPlayer.stop();
         mPlayerPosition = 0;
+
+        ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (mPosition == 0) {
+            if (ab != null) {
+                ab.setTitle(mRecipe.getName() + " Intro");
+            }
+        } else {
+            if (ab != null) {
+                ab.setTitle(mRecipe.getName() + " Step " + mPosition);
+            }
+        }
 
         // Update the description for this step
         mDescription.setText(mRecipe.getSteps().get(mPosition).getDescription());

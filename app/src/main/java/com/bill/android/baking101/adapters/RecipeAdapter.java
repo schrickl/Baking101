@@ -35,12 +35,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         return mRecipeList == null ? 0 : mRecipeList.size();
     }
 
-    public void addData(ArrayList<Recipe> recipes) {
-        mRecipeList.clear();
-        mRecipeList.addAll(recipes);
-        notifyDataSetChanged();
-    }
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_card_item, parent, false);
@@ -69,7 +63,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, RecipeStepsActivity.class);
-                intent.putExtra("recipe_extra", recipe);
+                intent.putExtra(mContext.getResources().getString(R.string.recipe_extra), recipe);
                 mContext.startActivity(intent);
             }
         });

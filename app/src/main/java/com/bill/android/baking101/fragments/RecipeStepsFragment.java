@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bill.android.baking101.R;
@@ -27,8 +28,10 @@ public class RecipeStepsFragment extends Fragment implements RecyclerViewOnClick
 
     private static final String LOG_TAG = RecipeStepsFragment.class.getSimpleName();
     private OnStepClickListener mCallback;
+    private Recipe mRecipe;
     @BindView(R.id.tv_ingredients) TextView mIngredients;
     @BindView(R.id.rv_step) RecyclerView mRecyclerView;
+    @BindView(R.id.sv_recipe_list) ScrollView mScrollView;
 
     @Override
     public void onClick(int position) {
@@ -65,7 +68,12 @@ public class RecipeStepsFragment extends Fragment implements RecyclerViewOnClick
 
         ButterKnife.bind(this, rootView);
 
-        Recipe mRecipe = getActivity().getIntent().getParcelableExtra("recipe_extra");
+        if (savedInstanceState == null) {
+            mScrollView.smoothScrollTo(0, 0);
+            mRecipe = getActivity().getIntent().getParcelableExtra(getResources().getString(R.string.recipe_extra));
+        } else {
+            mRecipe = savedInstanceState.getParcelable(getResources().getString(R.string.recipe_extra));
+        }
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayout.VERTICAL, false));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -79,6 +87,7 @@ public class RecipeStepsFragment extends Fragment implements RecyclerViewOnClick
                 mIngredients.append("\n");
             }
         }
+
         ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (ab != null) {
             ab.setTitle(mRecipe.getName());
@@ -86,5 +95,11 @@ public class RecipeStepsFragment extends Fragment implements RecyclerViewOnClick
 
         // Return the root view
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(getResources().getString(R.string.recipe_extra), mRecipe);
+        super.onSaveInstanceState(outState);
     }
 }

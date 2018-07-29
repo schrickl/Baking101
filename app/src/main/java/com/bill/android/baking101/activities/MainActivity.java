@@ -48,7 +48,11 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new RecipeAdapter(this, mRecipe);
         mRecyclerView.setAdapter(mAdapter);
 
-        loadRecipeData();
+        if (savedInstanceState == null) {
+            loadRecipeData();
+        } else {
+            mRecipe = savedInstanceState.getParcelableArrayList(getResources().getString(R.string.recipe_extra));
+        }
     }
 
     private void loadRecipeData() {
@@ -61,6 +65,12 @@ public class MainActivity extends AppCompatActivity {
         if (isConnected) {
             new FetchRecipeTask().execute();
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(getResources().getString(R.string.recipe_extra), mRecipe);
+        super.onSaveInstanceState(outState);
     }
 
     public static class FetchRecipeTask extends AsyncTask<Void, Void, ArrayList<Recipe>> {

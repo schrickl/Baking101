@@ -34,6 +34,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:gravity="start"
+                android:textColor="@color/colorAccent"
                 android:textSize="20sp"/>
             <TextView
                 android:id="@+id/tv_servings"
@@ -42,6 +43,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:gravity="end"
+                android:textColor="@color/colorAccent"
                 android:textSize="20sp"/>
         </LinearLayout>
     </LinearLayout>

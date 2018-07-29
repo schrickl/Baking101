@@ -5,4 +5,7 @@
     <string name="error_on_step_click">must implement OnStepClickListener</string>
     <string name="next_button">Next</string>
     <string name="previous_button">Previous</string>
+    <string name="recipe_extra">recipe_extra</string>
+    <string name="recipe_position">recipe_position_extra</string>
+    <string name="player_position">player_position_extra</string>
 </resources>

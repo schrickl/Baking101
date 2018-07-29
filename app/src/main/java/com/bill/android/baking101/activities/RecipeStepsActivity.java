@@ -18,15 +18,15 @@ public class RecipeStepsActivity extends AppCompatActivity implements RecipeStep
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_steps_list);
 
-        mRecipe = getIntent().getParcelableExtra("recipe_extra");
+        mRecipe = getIntent().getParcelableExtra(getResources().getString(R.string.recipe_extra));
     }
 
     @Override
     public void onStepSelected(int position) {
 
         Intent intent = new Intent(this, RecipeStepDetailActivity.class);
-        intent.putExtra("recipe_extra", mRecipe);
-        intent.putExtra("step_number", position);
+        intent.putExtra(getResources().getString(R.string.recipe_extra), mRecipe);
+        intent.putExtra(getResources().getString(R.string.recipe_position), position);
         startActivity(intent);
     }
 }
