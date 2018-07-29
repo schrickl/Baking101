@@ -32,20 +32,21 @@ public class RecipeJsonUtils {
     public static ArrayList<Recipe> getRecipeStringsFromJson(String recipeJsonString) throws JSONException {
 
         ArrayList<Recipe> recipes = new ArrayList<>();
-        ArrayList<Ingredient> ingredients = new ArrayList<>();
-        ArrayList<Step> steps = new ArrayList<>();
 
         if (recipeJsonString != null) {
             JSONArray recipesArray = new JSONArray(recipeJsonString);
 
             for (int i = 0; i < recipesArray.length(); i++) {
+                ArrayList<Ingredient> ingredients = new ArrayList<>();
+                ArrayList<Step> steps = new ArrayList<>();
+
                 JSONObject recipe = recipesArray.getJSONObject(i);
 
                 JSONArray ingredientsArray = recipe.getJSONArray(RECIPE_INGREDIENTS);
 
                 for (int j = 0; j < ingredientsArray.length(); j++) {
                     JSONObject ingredient = ingredientsArray.getJSONObject(j);
-                    ingredients.add(j, new Ingredient(ingredient.getInt(RECIPE_INGREDIENTS_QUANTITY),
+                    ingredients.add(j, new Ingredient(ingredient.getDouble(RECIPE_INGREDIENTS_QUANTITY),
                             ingredient.getString(RECIPE_INGREDIENTS_MEASURE),
                             ingredient.getString(RECIPE_INGREDIENTS_INGREDIENT)));
                 }
@@ -61,14 +62,10 @@ public class RecipeJsonUtils {
                 }
 
                 recipes.add(i, new Recipe(recipe.getInt(RECIPE_ID),
-                        recipe.getString(RECIPE_NAME), ingredients.get(i), steps.get(i),
+                        recipe.getString(RECIPE_NAME), ingredients, steps,
                         recipe.getInt(RECIPE_SERVINGS),
                         recipe.getString(RECIPE_IMAGE)));
             }
-        }
-
-        for (int i = 0; i < recipes.size(); i++) {
-            Log.d(LOG_TAG, "recipe[" + i + "]: " + recipes.get(i).toString());
         }
 
         return recipes;

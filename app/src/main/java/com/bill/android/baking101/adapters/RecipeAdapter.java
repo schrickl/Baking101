@@ -53,7 +53,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         final Recipe recipe = mRecipeList.get(position);
 
         holder.name.setText(recipe.getName());
-        // Set a drawable for the image;
+        // Set a drawable for the image
         if (recipe.getId() == 1) {
             holder.image.setImageResource(R.drawable.nutella_pie);
         } else if (recipe.getId() == 2) {

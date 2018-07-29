@@ -3,16 +3,18 @@ package com.bill.android.baking101.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 public class Recipe implements Parcelable {
 
     private int mId;
     private String mName;
-    private Ingredient mIngredients;
-    private Step mSteps;
+    private ArrayList<Ingredient> mIngredients;
+    private ArrayList<Step> mSteps;
     private int mServings;
     private String  mThumbnail;
 
-    public Recipe (int id, String name, Ingredient ingredients, Step steps, int servings, String thumbnail) {
+    public Recipe (int id, String name, ArrayList<Ingredient> ingredients, ArrayList<Step> steps, int servings, String thumbnail) {
         mId = id;
         mName = name;
         mIngredients = ingredients;
@@ -20,6 +22,27 @@ public class Recipe implements Parcelable {
         mServings = servings;
         mThumbnail = thumbnail;
     }
+
+    protected Recipe(Parcel in) {
+        mId = in.readInt();
+        mName = in.readString();
+        mIngredients = in.createTypedArrayList(Ingredient.CREATOR);
+        mSteps = in.createTypedArrayList(Step.CREATOR);
+        mServings = in.readInt();
+        mThumbnail = in.readString();
+    }
+
+    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
+        @Override
+        public Recipe createFromParcel(Parcel in) {
+            return new Recipe(in);
+        }
+
+        @Override
+        public Recipe[] newArray(int size) {
+            return new Recipe[size];
+        }
+    };
 
     public int getId() {
         return mId;
@@ -37,19 +60,19 @@ public class Recipe implements Parcelable {
         this.mName = name;
     }
 
-    public Ingredient getIngredients() {
+    public ArrayList<Ingredient> getIngredients() {
         return mIngredients;
     }
 
-    public void setIngredients(Ingredient ingredients) {
+    public void setIngredients(ArrayList<Ingredient> ingredients) {
         this.mIngredients = ingredients;
     }
 
-    public Step getSteps() {
+    public ArrayList<Step> getSteps() {
         return mSteps;
     }
 
-    public void setSteps(Step steps) {
+    public void setSteps(ArrayList<Step> steps) {
         this.mSteps = steps;
     }
 
@@ -81,35 +104,18 @@ public class Recipe implements Parcelable {
                 '}';
     }
 
-    protected Recipe(Parcel in) {
-        mId = in.readInt();
-        mName = in.readString();
-        mServings = in.readInt();
-        mThumbnail = in.readString();
-    }
-
-    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
-        @Override
-        public Recipe createFromParcel(Parcel in) {
-            return new Recipe(in);
-        }
-
-        @Override
-        public Recipe[] newArray(int size) {
-            return new Recipe[size];
-        }
-    };
-
     @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(mId);
-        parcel.writeString(mName);
-        parcel.writeInt(mServings);
-        parcel.writeString(mThumbnail);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mId);
+        dest.writeString(mName);
+        dest.writeTypedList(mIngredients);
+        dest.writeTypedList(mSteps);
+        dest.writeInt(mServings);
+        dest.writeString(mThumbnail);
     }
 }
