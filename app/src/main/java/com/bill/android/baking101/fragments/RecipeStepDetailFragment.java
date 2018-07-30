@@ -125,12 +125,12 @@ public class RecipeStepDetailFragment extends Fragment implements ExoPlayer.Even
             mPosition--;
         }
 
+        mPlayerPosition = 0;
         playVideo(mPosition);
     }
 
     public void playVideo(int position) {
         mPlayer.stop();
-        mPlayerPosition = 0;
 
         mPosition = position;
 
