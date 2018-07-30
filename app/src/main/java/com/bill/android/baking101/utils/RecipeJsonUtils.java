@@ -1,7 +1,5 @@
 package com.bill.android.baking101.utils;
 
-import android.util.Log;
-
 import com.bill.android.baking101.models.Ingredient;
 import com.bill.android.baking101.models.Recipe;
 import com.bill.android.baking101.models.Step;

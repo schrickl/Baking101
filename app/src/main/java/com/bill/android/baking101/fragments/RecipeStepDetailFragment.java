@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -71,7 +70,6 @@ public class RecipeStepDetailFragment extends Fragment implements ExoPlayer.Even
             mRecipe = savedInstanceState.getParcelable(getResources().getString(R.string.recipe_extra));
             mPosition = savedInstanceState.getInt(getResources().getString(R.string.recipe_position));
             mPlayerPosition = savedInstanceState.getLong(getResources().getString(R.string.player_position));
-            Log.d(LOG_TAG, "saved position: " + mPlayerPosition);
         }
 
         initializePlayer();
@@ -90,7 +88,7 @@ public class RecipeStepDetailFragment extends Fragment implements ExoPlayer.Even
         });
         mDescription.setText(mRecipe.getSteps().get(mPosition).getDescription());
 
-        playVideo();
+        playVideo(mPosition);
 
         // Return the root view
         return rootView;
@@ -101,10 +99,8 @@ public class RecipeStepDetailFragment extends Fragment implements ExoPlayer.Even
         outState.putParcelable(getResources().getString(R.string.recipe_extra), mRecipe);
         outState.putInt(getResources().getString(R.string.recipe_position), mPosition);
         if (mPlayer != null) {
-            Log.d(LOG_TAG, "saving position: " + mPlayer.getCurrentPosition());
             outState.putLong(getResources().getString(R.string.player_position), mPlayer.getCurrentPosition());
         } else {
-            Log.d(LOG_TAG, "saving position: " + mPlayerPosition);
             outState.putLong(getResources().getString(R.string.player_position), mPlayerPosition);
         }
         super.onSaveInstanceState(outState);
@@ -128,6 +124,15 @@ public class RecipeStepDetailFragment extends Fragment implements ExoPlayer.Even
         } else {
             mPosition--;
         }
+
+        playVideo(mPosition);
+    }
+
+    public void playVideo(int position) {
+        mPlayer.stop();
+        mPlayerPosition = 0;
+
+        mPosition = position;
 
         if (mPosition == 0) {
             // Disable the previousBtn
@@ -153,15 +158,8 @@ public class RecipeStepDetailFragment extends Fragment implements ExoPlayer.Even
             mNextBtn.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         }
 
-        playVideo();
-    }
-
-    private void playVideo() {
-        mPlayer.stop();
-        mPlayerPosition = 0;
-
         ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (mPosition == 0) {
+        if (position == 0) {
             if (ab != null) {
                 ab.setTitle(mRecipe.getName() + " Intro");
             }

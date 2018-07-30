@@ -8,13 +8,18 @@
     android:showDividers="middle">
 
     <fragment
-        android:id="@+id/recipe_steps_fragment"
+        android:id="@+id/recipe_step_fragment_tab"
         android:name="com.bill.android.baking101.fragments.RecipeStepsFragment"
         android:layout_width="300dp"
         android:layout_height="match_parent"/>
 
+    <View
+        android:layout_width="2dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/darker_gray" />
+
     <fragment
-        android:id="@+id/recipe_step_detail_fragment"
+        android:id="@+id/recipe_step_detail_fragment_tab"
         android:name="com.bill.android.baking101.fragments.RecipeStepDetailFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
