@@ -1,6 +1,9 @@
 package com.bill.android.baking101.fragments;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -71,6 +74,17 @@ public class RecipeStepsFragment extends Fragment implements RecyclerViewOnClick
         if (savedInstanceState == null) {
             mScrollView.smoothScrollTo(0, 0);
             mRecipe = getActivity().getIntent().getParcelableExtra(getResources().getString(R.string.recipe_extra));
+
+            // Save last viewed recipe in SharedPrefs for the widget to use
+            SharedPreferences prefs = getContext().getSharedPreferences(getString(R.string.widget_prefs), Context.MODE_PRIVATE | Context.MODE_MULTI_PROCESS);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(getString(R.string.recipe_name), mRecipe.getName());
+            editor.putString(getString(R.string.recipe_ingredients), ingredientsBuilder());
+            editor.commit();
+
+            // and let the widget know there is a new most-recently-selected recipe to display
+            Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+            getContext().sendBroadcast(intent);
         } else {
             mRecipe = savedInstanceState.getParcelable(getResources().getString(R.string.recipe_extra));
         }
@@ -81,12 +95,7 @@ public class RecipeStepsFragment extends Fragment implements RecyclerViewOnClick
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
         mRecyclerView.setAdapter(mAdapter);
 
-        for (int i = 0; i < mRecipe.getIngredients().size(); i++) {
-            mIngredients.append(new StringBuilder().append(mRecipe.getIngredients().get(i).getQuantity()).append(" ").append(mRecipe.getIngredients().get(i).getmMeasure()).append(" ").append(mRecipe.getIngredients().get(i).getmName()).toString());
-            if (i != mRecipe.getIngredients().size() - 1) {
-                mIngredients.append("\n");
-            }
-        }
+        mIngredients.setText(ingredientsBuilder());
 
         ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (ab != null) {
@@ -95,6 +104,19 @@ public class RecipeStepsFragment extends Fragment implements RecyclerViewOnClick
 
         // Return the root view
         return rootView;
+    }
+
+    private String ingredientsBuilder() {
+        String ingredients = "";
+
+        for (int i = 0; i < mRecipe.getIngredients().size(); i++) {
+            ingredients += mRecipe.getIngredients().get(i).getQuantity() + " " + mRecipe.getIngredients().get(i).getmMeasure() + " " + mRecipe.getIngredients().get(i).getmName();
+            if (i != mRecipe.getIngredients().size() - 1) {
+                ingredients += ("\n");
+            }
+        }
+
+        return ingredients;
     }
 
     @Override
