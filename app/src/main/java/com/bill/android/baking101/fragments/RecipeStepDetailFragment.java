@@ -198,23 +198,25 @@ public class RecipeStepDetailFragment extends Fragment implements ExoPlayer.Even
     @Override
     public void onStart() {
         super.onStart();
-        if (mPlayer == null) {
+        if (Util.SDK_INT > 23) {
             initializePlayer();
+            playVideo(mPosition);
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if ( mPlayer == null) {
+        if (Util.SDK_INT <= 23 || mPlayer == null) {
             initializePlayer();
+            playVideo(mPosition);
         }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (mPlayer != null) {
+        if (Util.SDK_INT <= 23) {
             mPlayerPosition = mPlayer.getCurrentPosition();
             releasePlayer();
         }
@@ -223,7 +225,7 @@ public class RecipeStepDetailFragment extends Fragment implements ExoPlayer.Even
     @Override
     public void onStop() {
         super.onStop();
-        if (mPlayer != null) {
+        if (Util.SDK_INT > 23) {
             mPlayerPosition = mPlayer.getCurrentPosition();
             releasePlayer();
         }
