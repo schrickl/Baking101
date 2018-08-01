@@ -8,6 +8,7 @@
     <string name="recipe_extra">recipe_extra</string>
     <string name="recipe_position">recipe_position_extra</string>
     <string name="player_position">player_position_extra</string>
+    <string name="play_when_ready_extra">play_when_ready_extra</string>
     <string name="add_widget">Add widget</string>
     <string name="recipe_name">recipe_name</string>
     <string name="recipe_ingredients">recipe_ingredients</string>

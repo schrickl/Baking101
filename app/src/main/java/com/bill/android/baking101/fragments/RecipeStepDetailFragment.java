@@ -45,6 +45,7 @@ public class RecipeStepDetailFragment extends Fragment implements ExoPlayer.Even
     private Recipe mRecipe;
     private int mPosition;
     private long mPlayerPosition = 0;
+    private boolean mPlayWhenReady = false;
     @BindView(R.id.exo_player) SimpleExoPlayerView mPlayerView;
     @BindView(R.id.tv_step_description) TextView mDescription;
     @BindView(R.id.btn_next) Button mNextBtn;
@@ -70,6 +71,7 @@ public class RecipeStepDetailFragment extends Fragment implements ExoPlayer.Even
             mRecipe = savedInstanceState.getParcelable(getResources().getString(R.string.recipe_extra));
             mPosition = savedInstanceState.getInt(getResources().getString(R.string.recipe_position));
             mPlayerPosition = savedInstanceState.getLong(getResources().getString(R.string.player_position));
+            mPlayWhenReady = savedInstanceState.getBoolean(getResources().getString(R.string.play_when_ready_extra))
         }
 
         initializePlayer();
@@ -100,6 +102,7 @@ public class RecipeStepDetailFragment extends Fragment implements ExoPlayer.Even
         outState.putInt(getResources().getString(R.string.recipe_position), mPosition);
         if (mPlayer != null) {
             outState.putLong(getResources().getString(R.string.player_position), mPlayer.getCurrentPosition());
+            outState.putBoolean(getResources().getString(R.string.play_when_ready_extra), mPlayWhenReady);
         } else {
             outState.putLong(getResources().getString(R.string.player_position), mPlayerPosition);
         }
@@ -218,6 +221,7 @@ public class RecipeStepDetailFragment extends Fragment implements ExoPlayer.Even
         super.onPause();
         if (Util.SDK_INT <= 23) {
             mPlayerPosition = mPlayer.getCurrentPosition();
+            mPlayWhenReady = mPlayer.getPlayWhenReady();
             releasePlayer();
         }
     }
